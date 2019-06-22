@@ -1,0 +1,1 @@
+#quick converting data from stuff like raw reaction event

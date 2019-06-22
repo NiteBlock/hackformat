@@ -1,0 +1,1 @@
+#mutes and unmutes a user in all channels
