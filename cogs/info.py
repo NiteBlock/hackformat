@@ -1,1 +1,0 @@
-#user/bot/guild/channel info
