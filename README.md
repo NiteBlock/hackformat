@@ -47,7 +47,7 @@ Jobs: Main bot tree, util functions, format
 
 Discord: cheekysim#6666 
 Github: cheekysim 
-Timezone: Unknown 
+Timezone: GMT 
 Jobs: Fun commands, reaction action 
 
 Discord: Right#0178 
