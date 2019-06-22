@@ -34,34 +34,34 @@ This is a multifunctional dicsord bot that was made for hackweek!
 basicly our bot.py file goes though each file in the cogs folders and adds them to the bot itself so that they can be used. The way we create embeds? its simple our cogs files `from utils.embed import ce` which allows us to use ce to make embeds faster! Now im sure you have many other questions! simply contact Nite#0001 on discord!
 
 
-**The devs**
+#The devs
 All of the devs that made this bot!
 
-**Head dev**
-Discord: Nite#0001
-Github: Niteblock
-Timezone: CET
-Jobs: Main bot tree, util functions, format
+**Head dev**\n
+Discord: Nite#0001\n
+Github: Niteblock\n
+Timezone: CET\n
+Jobs: Main bot tree, util functions, format\n
 
-**Other devs**
+**Other devs**\n
 
-Discord: cheekysim#6666
-Github: cheekysim
-Timezone: Unknown
-Jobs: Fun commands, reaction action
+Discord: cheekysim#6666\n
+Github: cheekysim\n
+Timezone: Unknown\n
+Jobs: Fun commands, reaction action\n
 
-Discord: Right#0178
-Github: dawdadwadawdadwda
-Timezone: CET
-Jobs: Mod commands, utility commands
+Discord: Right#0178\n
+Github: dawdadwadawdadwda\n
+Timezone: CET\n
+Jobs: Mod commands, utility commands\n
 
 
-Discord: Covex#6460
-Github: Cozop
-Timezone: GMT
-Jobs: Antispam / AnitAdvertisment / AntiSwear
+Discord: Covex#6460X\n
+Github: Cozop\n
+Timezone: GMT\n
+Jobs: Antispam / AnitAdvertisment / AntiSwear\n
 
-Discord: Davis#9654
-Github: davisschenk
-Timezone: Unknown
-Jobs: Unknown   
+Discord: Davis#9654\n
+Github: davisschenk\n
+Timezone: Unknown\n
+Jobs: Unknown\n
