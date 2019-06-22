@@ -38,30 +38,40 @@ basicly our bot.py file goes though each file in the cogs folders and adds them 
 All of the devs that made this bot!
 
 **Head dev**
+```
 Discord: Nite#0001 
 Github: Niteblock 
 Timezone: CET 
 Jobs: Main bot tree, util functions, format 
+```
 
 **Other devs** 
 
+
+```
 Discord: cheekysim#6666 
 Github: cheekysim 
 Timezone: GMT 
 Jobs: Fun commands, reaction action 
+```
 
+```
 Discord: Right#0178 
 Github: dawdadwadawdadwda 
 Timezone: CET 
 Jobs: Mod commands, utility commands 
+```
 
-
+```
 Discord: Covex#6460X 
 Github: Cozop 
 Timezone: GMT 
 Jobs: Antispam / AnitAdvertisment / AntiSwear 
+```
 
+```
 Discord: Davis#9654 
 Github: davisschenk 
 Timezone: Unknown 
 Jobs: Unknown 
+```
