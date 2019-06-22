@@ -17,8 +17,8 @@ This is a multifunctional dicsord bot that was made for hackweek!
 
 ```json
 {
-"defaultprefix" : "+"
-"token" : "INSERT BOT TOKEN",
+"defaultprefix" : "+",
+"token" : "INSERT BOT TOKEN"
 }
 ```
 
