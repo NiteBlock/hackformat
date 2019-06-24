@@ -1,30 +1,26 @@
 import discord
 from discord.ext import commands
-import os,json
+import os
+import json
 import asyncio
 import time
 from discord.ext.commands import Bot
 import random
 import discord.utils
+from utils.hackformat import HackFormatBot
 
 
-class Config:
-    def __init__(self):
-        self.config = json.loads(open("./config.json", "r").read())
-        self.token = self.config["token"]
-        self.default_prefix = self.config["defaultprefix"]
+async def get_pre(bot, message):
+    # mentioned or defaultprefix
+    return [bot.user.mention + ' ', '<@!%s> ' % bot.user.id, bot.config["defaultprefix"]]
 
 
-def get_pre(message):
-    return commands.when_mentioned_or(Config().default_prefix)
-
-
-bot = commands.Bot(command_prefix=get_pre)
+bot = HackFormatBot(command_prefix=get_pre)
 
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name=f"{Config().default_prefix}help"))
+    await bot.change_presence(activity=discord.Game(name=f"{bot.config['defaultprefix']}help"))
     print("Started!")
 
 if __name__ == "__main__":
@@ -36,4 +32,4 @@ if __name__ == "__main__":
             except Exception as e:
                 print(f"{e.__class__.__name__} Caused by loading cog {cog}\n {e}")
 
-    bot.run(Config().token)
+    bot.run(bot.config["token"])
