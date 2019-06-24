@@ -58,7 +58,7 @@ class Owner(commands.Cog):
     @owner.command(name="reload")
     @is_owner()
     async def reload(self, ctx, extension: str):
-        """Unload an extension"""
+        """Reload an extension"""
 
         embed = discord.Embed(title="Reload Extension")
         try:
