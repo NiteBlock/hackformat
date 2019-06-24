@@ -17,6 +17,7 @@ class Moderation(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.has_permissions(manage_messages=True)
     async def purge(self, ctx, amount=30000):
         await ctx.channel.purge(limit=amount, check=lambda msg: not msg.pinned)
 
@@ -106,3 +107,7 @@ class Moderation(commands.Cog):
 
         embed.add_field(name="Done!", value=f"Unmuted {member.mention}")
         await ctx.send(embed=embed)
+
+        
+def setup(bot):
+    bot.add_cog(Moderation(bot))
