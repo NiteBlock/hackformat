@@ -1,6 +1,10 @@
 from discord.ext import commands
 import json
 import discord
+from contextlib import redirect_stdout
+import textwrap
+import io
+import traceback
 
 
 def is_owner():
@@ -79,6 +83,46 @@ class Owner(commands.Cog):
         for extension in self.bot.extensions:
             embed.add_field(name=extension, value="Loaded!", inline=False)
         await ctx.send(embed=embed)
+
+    @owner.command(name="eval")
+    @is_owner()
+    async def owner_eval(self, ctx, *, code: str):
+        env = {
+            'bot': self.bot,
+            'ctx': ctx,
+            'channel': ctx.channel,
+            'author': ctx.author,
+            'guild': ctx.guild,
+            'message': ctx.message,
+        }
+
+        env.update(globals())
+
+        code = code.strip('```')
+        print(code)
+
+        code = f'async def my_func(): \n{textwrap.indent(code, "  ")}'
+
+        print(code)
+
+        stdout = io.StringIO()
+
+        with redirect_stdout(stdout):
+            exec(code, env)
+
+        func = env['my_func']
+
+        try:
+            with redirect_stdout(stdout):
+                output = await func()
+        except Exception as e:
+            value = stdout.getvalue()
+            await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
+        else:
+            value = stdout.getvalue()
+            if not output:
+                return await ctx.send(f"Value: \n ```{value}```")
+            return await ctx.send(f"Value: \n ```{value} \n {output}```")
 
 
 def setup(bot):
