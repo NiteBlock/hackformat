@@ -72,6 +72,14 @@ class Owner(commands.Cog):
         embed._colour = color
         await ctx.send(embed=embed)
 
+    @owner.command(name="list")
+    @is_owner()
+    async def list(self, ctx):
+        embed = discord.Embed(title="Extensions", color=discord.Color.green())
+        for extension in self.bot.extensions:
+            embed.add_field(name=extension, value="Loaded!", inline=False)
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(bot)
