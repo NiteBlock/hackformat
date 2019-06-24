@@ -11,10 +11,10 @@ def is_owner():
 
 
 class Owner(commands.Cog):
-    def __int__(self, bot):
+    def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(name="owner", invoke_without_context=True)
+    @commands.group(name="owner", invoke_without_command=True)
     async def owner(self, ctx):
         await ctx.send_help(self.owner)
 
