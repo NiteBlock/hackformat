@@ -5,6 +5,7 @@ import json
 
 class HackFormatContext(commands.Context):
     async def confirm(self, **kwargs):
+        """Helper for messages where the user answers a yes or no question"""
         def check(reaction, user):
             return self.author.id == user.id and reaction.emoji in ['👎', '👍']
 
@@ -27,8 +28,11 @@ class HackFormatContext(commands.Context):
         return False
 
     async def emoji_choice(self, reactions, **kwargs):
+        """Helper for messages where use chooses an emoji. NOTE: only works with unicode emojis"""
         def check(reaction, user):
-            return self.author.id == user.id and reaction.emoji in reactions.keys()
+            return self.author.id == user.id and ord(reaction.emoji) in reactions.keys()
+
+        reactions = {ord(k): v for (k, v) in reactions.items()}
 
         prompt = kwargs.get("prompt", None)
         embed = kwargs.get("embed", None)
@@ -40,14 +44,11 @@ class HackFormatContext(commands.Context):
         msg = await self.send(content=prompt, embed=embed)
 
         for reaction in reactions.keys():
-            await msg.add_reaction(reaction)
+            await msg.add_reaction(chr(reaction))
 
         reaction, member = await self.bot.wait_for('reaction_add', check=check, timeout=timeout)
 
-        return reactions.get(str(reaction.emoji))
-
-
-
+        return reactions.get(ord(reaction.emoji))
 
 
 class HackFormatBot(commands.Bot):
@@ -61,3 +62,4 @@ class HackFormatBot(commands.Bot):
 
     async def get_context(self, message, *, cls=None):
         return await super().get_context(message, cls=HackFormatContext)
+

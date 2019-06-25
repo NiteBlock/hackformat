@@ -5,6 +5,7 @@ from contextlib import redirect_stdout
 import textwrap
 import io
 import traceback
+from utils.converters import Code
 
 
 def is_owner():
@@ -13,17 +14,6 @@ def is_owner():
             return ctx.author.id in json.load(r)["owners"]
 
     return commands.check(predicate)
-
-
-class Code(commands.Converter):
-    async def convert(self, ctx, arg):
-        return self.cleanup_code(arg)
-
-    @staticmethod
-    def cleanup_code(code):
-        if code.startswith('```') and code.endswith('```'):
-            return code.strip("```").strip("\n")
-        return code.strip('\n')
 
 
 class Owner(commands.Cog):
