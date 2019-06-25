@@ -5,6 +5,9 @@ from utils.hackformat import HackFormatBot
 from pathlib import Path
 from functools import reduce
 
+for filename in os.listdir("./cogs"):
+    if filename.endswith(".py"):
+        bot.load_extension(f"cogs.{filename[:-3]}")
 
 async def get_pre(bot, message):
     # mentioned or defaultprefix
