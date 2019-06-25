@@ -55,7 +55,7 @@ class HackFormatContext(commands.Context):
         if thumbnail is None:
             await self.send(embed=discord.Embed(description=error, colour=colour).set_author(name=title, icon_url=icon))
             return
-        await self.send(embed=discord.Embed(description=error, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
+        return await self.send(embed=discord.Embed(description=error, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
 
 
     async def done(self, description, title=None, **kwargs):
@@ -66,7 +66,7 @@ class HackFormatContext(commands.Context):
         if thumbnail is None:
             await self.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon))
             return
-        await self.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
+        return await self.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
 
     async def info(self, description, title=None, **kwargs):
         title = title or "Info"
@@ -76,7 +76,7 @@ class HackFormatContext(commands.Context):
         if thumbnail is None:
             await self.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon))
             return
-        await self.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
+        return await self.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
 
 
 class HackFormatBot(commands.Bot):

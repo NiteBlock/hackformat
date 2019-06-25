@@ -23,16 +23,17 @@ class Owner(commands.Cog):
     @is_admin()
     async def owner_load_extension(self, ctx, extension: str):
         """Load an Extension"""
-        if not extention.startswith("cogs."):
-            extention = "cogs." + extention
+        cog = extension.replace("cogs.", "")
+        if not extension.startswith("cogs."):
+            extension = "cogs." + extension
 
         try:
             self.bot.load_extension(name=extension)
-            await ctx.done(f"Loaded extention!", extension)
+            await ctx.done(f"Loaded extention!", cog)
         except commands.ExtensionAlreadyLoaded:
-            await ctx.info(f"Extention was already loaded!", extension)
+            await ctx.info(f"Extention was already loaded!")
         except Exception as e:
-            await ctx.error(f"Failure! \n Error: {e}", extension)
+            await ctx.error(f"Failure! \n Error: {e}", cog)
 
 
 
@@ -40,35 +41,32 @@ class Owner(commands.Cog):
     @is_admin()
     async def owner_unload(self, ctx, extension: str):
         """Unload an extension"""
+        cog = extension.replace("cogs.", "")
+        if not extension.startswith("cogs."):
+            extension = "cogs." + extension
 
-        embed = discord.Embed(title="Unload Extension")
         try:
             self.bot.unload_extension(name=extension)
-            embed.add_field(name=extension, value="Success!")
-            color = discord.Color.green()
+            await ctx.done(f"Unloaded extention!", cog)
+        except commands.ExtensionNotLoaded:
+            await ctx.error(f"The extention was never loaded!")
         except Exception as e:
-            embed.add_field(name=extension, value="Failure! \n Error: " + str(e))
-            color = discord.Color.red()
-
-        embed._colour = color
-        await ctx.send(embed=embed)
+            await ctx.error(f"Failure! \n Error: {e}", cog)
 
     @owner.command(name="reload")
     @is_admin()
     async def owner_reload(self, ctx, extension: str):
         """Reload an extension"""
+        cog = extension.replace("cogs.", "")
+        if not extension.startswith("cogs."):
+            extension = "cogs." + extension
 
-        embed = discord.Embed(title="Reload Extension")
         try:
             self.bot.reload_extension(name=extension)
-            embed.add_field(name=extension, value="Success!")
-            color = discord.Color.green()
+            await ctx.done(f"Reloaded extention!", cog)
         except Exception as e:
-            embed.add_field(name=extension, value="Failure! \n Error: " + str(e))
-            color = discord.Color.red()
+            await ctx.error(f"Failure! \n Error: {e}", cog)
 
-        embed._colour = color
-        await ctx.send(embed=embed)
 
     @owner.command(name="list")
     @is_admin()
