@@ -4,14 +4,14 @@ import json
 
 
 class HackFormatContext(commands.Context):
-    async def confirm(self, prompt):
+    async def confirm(self, **kwargs):
         def check(reaction, user):
             return self.author.id == user.id and reaction.emoji in ['👎', '👍']
 
-        if isinstance(prompt, str):
-            msg = await self.send(prompt)
-        elif isinstance(prompt, discord.Embed):
-            msg = await self.send(embed=prompt)
+        prompt = kwargs.get("prompt", "Yes or No?")
+        embed = kwargs.get("embed", None)
+
+        msg = await self.send(content=prompt, embed=embed)
 
         await msg.add_reaction('👍')
         await msg.add_reaction('👎')
