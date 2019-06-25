@@ -21,5 +21,6 @@ class Reactions(commands.Cog):
             elif str(reaction.emoji) == reactions[1]:
                 await ctx.send(reactions[1])
 
+
 def setup(bot):
     bot.add_cog(Reactions(bot))

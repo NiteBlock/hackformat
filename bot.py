@@ -5,12 +5,14 @@ from utils.hackformat import HackFormatBot
 from pathlib import Path
 from functools import reduce
 
+
 async def get_pre(bot, message):
     # mentioned or defaultprefix
     return [bot.user.mention + ' ', '<@!%s> ' % bot.user.id, bot.config["defaultprefix"]]
 
 
 bot = HackFormatBot(command_prefix=get_pre)
+
 
 @bot.event
 async def on_ready():
