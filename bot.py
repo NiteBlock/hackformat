@@ -5,8 +5,7 @@ from utils.hackformat import HackFormatBot
 from pathlib import Path
 from functools import reduce
 
-
-async def get_pre(bot, message):
+def get_pre(bot, message):
     # mentioned or defaultprefix 
     return [bot.user.mention + ' ', '<@!%s> ' % bot.user.id, bot.config["defaultprefix"]]
 
@@ -21,7 +20,7 @@ async def on_ready():
 
 
 def format_cog(path):
-    replacements = (('\\', '.'), ('.py', ''))
+    replacements = (('/', '.'), ('.py', ''))
     for r in replacements:
         path = path.replace(*r)
 

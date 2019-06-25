@@ -21,7 +21,7 @@ class ErrorHandler(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_command_error(self, error):
+    async def on_command_error(self, ctx, error):
         pass
 
 
