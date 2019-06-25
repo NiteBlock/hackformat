@@ -1,6 +1,12 @@
-from discord.ext import commands
-import discord
 import inspect
+import discord
+from discord.ext import commands
+import asyncio
+import time
+from discord.ext.commands import Bot
+import random
+import discord.utils
+
 
 class Moderation(commands.Cog):
     """Commands to be used for moderation"""
@@ -85,6 +91,30 @@ class Moderation(commands.Cog):
         embed.add_field(name="Done!", value=f"Unmuted {member.mention}")
         await ctx.send(embed=embed)
 
+
+    @commands.command()
+    @commands.guild_only
+    @commands.has_permissions(send_message=True)
+    async def info(self, ctx, member : discord.Member):
+
+        roles = [role for role in member.roles]
+        embed = discord.Embed(
+        color = discord.Color.green()
+        )
+        embed.set_author(name="User info")
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.add_field(name="ID:", value=member.id, inline=False)
+        embed.add_field(name="Guild name:", value=member.display_name, inline=False)
+
+        embed.add_field(name="Account created:", value=member.created_at.strftime("%a, %d %B %Y, %I:%M %p UTC"), inline=False)
+        embed.add_field(name="Joined at:", value=member.joined_at.strftime("%a, %d %B %Y, %I:%M %p UTC"), inline=False)
+
+        embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]), inline=False)
+        embed.add_field(name="Top Role:", value=member.top_role.mention, inline=False)
+        embed.add_field(name="Bot?", value=member.bot, inline=False)
+
+        await ctx.send(embed=embed)
         
 def setup(bot):
     bot.add_cog(Moderation(bot))

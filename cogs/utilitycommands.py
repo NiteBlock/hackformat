@@ -1,7 +1,7 @@
-from discord.ext import commands
+import discord
 
 
-class AntiSpam(commands.Cog):
+class Utility(commands.Cog):
     """Utility Commands"""
 
     def __init__(self, bot):
@@ -9,4 +9,4 @@ class AntiSpam(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(AntiSpam(bot))
+    bot.add_cog(Utility(bot))
