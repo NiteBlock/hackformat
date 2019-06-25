@@ -14,6 +14,17 @@ def is_owner():
     return commands.check(predicate)
 
 
+class Code(commands.Converter):
+    async def convert(self, ctx, arg):
+        return self.cleanup_code(arg)
+
+    @staticmethod
+    def cleanup_code(code):
+        if code.startswith('```') and code.endswith('```'):
+            return code.strip("```").strip("\n")
+        return code.strip('\n')
+
+
 class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -86,43 +97,42 @@ class Owner(commands.Cog):
 
     @owner.command(name="eval")
     @is_owner()
-    async def owner_eval(self, ctx, *, code: str):
-        env = {
-            'bot': self.bot,
-            'ctx': ctx,
-            'channel': ctx.channel,
-            'author': ctx.author,
-            'guild': ctx.guild,
-            'message': ctx.message,
-        }
-
-        env.update(globals())
-
-        code = code.strip('```')
-        print(code)
-
-        code = f'async def my_func(): \n{textwrap.indent(code, "  ")}'
-
-        print(code)
-
+    async def owner_eval(self, ctx, *, code: Code):
         stdout = io.StringIO()
 
-        with redirect_stdout(stdout):
-            exec(code, env)
+        env = {
+            'ctx': ctx,
+            'bot': self.bot,
+            'guild': ctx.guild,
+            'channel': ctx.channel,
+            'author': ctx.author,
+            'message': ctx.message
+        }
+        print(code)
+        env.update(globals())
+        formatted_code = f'async def my_func(): \n{textwrap.indent(code, "  ")}'
+        print(formatted_code)
+
+        try:
+            with redirect_stdout(stdout):
+                exec(formatted_code, env)
+        except Exception as e:
+            return await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
 
         func = env['my_func']
 
         try:
             with redirect_stdout(stdout):
-                output = await func()
-        except Exception as e:
+                func_return = await func()
+        except:
             value = stdout.getvalue()
             await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
         else:
             value = stdout.getvalue()
-            if not output:
-                return await ctx.send(f"Value: \n ```{value}```")
-            return await ctx.send(f"Value: \n ```{value} \n {output}```")
+
+            if not func_return:
+                return await ctx.send(f"""```py\n Output: \n {value}```""")
+            return await ctx.send(f"""```py\n Output: \n {value} \n Returned: \n {func_return} ```""")
 
 
 def setup(bot):
