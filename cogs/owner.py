@@ -11,6 +11,7 @@ def is_owner():
     async def predicate(ctx):
         with open("config.json", "r") as r:
             return ctx.author.id in json.load(r)["owners"]
+
     return commands.check(predicate)
 
 
@@ -27,7 +28,7 @@ class Code(commands.Converter):
 
 class Owner(commands.Cog):
     """Owner only commands"""
-    
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -100,8 +101,11 @@ class Owner(commands.Cog):
     @owner.command(name="eval")
     @is_owner()
     async def owner_eval(self, ctx, *, code: Code):
+        # Interface to store console output
         stdout = io.StringIO()
+        embed = discord.Embed(title="Eval Code")
 
+        # variable to add to environment when we compile code
         env = {
             'ctx': ctx,
             'bot': self.bot,
@@ -111,30 +115,41 @@ class Owner(commands.Cog):
             'message': ctx.message
         }
 
+        # add vars to env
         env.update(globals())
+
+        # wrap code in a func
         formatted_code = f'async def my_func(): \n{textwrap.indent(code, "  ")}'
 
+        # Compile code into usable object
         try:
             with redirect_stdout(stdout):
                 exec(formatted_code, env)
         except Exception as e:
-            return await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
-
+            embed._colour = discord.Color.red()
+            embed.add_field(name="Error", value=f'```py\n{e.__class__.__name__}: {e}\n```')
+            return await ctx.send(embed=embed)
+        # get function from env
         func = env['my_func']
 
+        # call func and capture output
         try:
             with redirect_stdout(stdout):
                 func_return = await func()
-        except:
+        except Exception:
             value = stdout.getvalue()
-            await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
+            embed._colour = discord.Color.red()
+            embed.add_field(name="Error", value=f'```py\n{value}{traceback.format_exc()}\n```')
+            return await ctx.send(embed=embed)
         else:
             value = stdout.getvalue()
+            embed._colour = discord.Color.green()
+            if value:
+                embed.add_field(name="Console Output", value=f'```py\n{value}```')
+            if func_return:
+                embed.add_field(name="Returned", value=f'```py\n{func_return}```')
 
-            if not func_return:
-                return await ctx.send(f"""```py\n Output: \n {value}```""")
-            return await ctx.send(f"""```py\n Output: \n {value} \n Returned: \n {func_return} ```""")
-
+            return await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Owner(bot))
