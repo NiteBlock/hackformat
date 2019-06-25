@@ -17,7 +17,7 @@ class Reactions(commands.Cog):
         reaction = await self.bot.wait_for('raw_reaction_add')
         if reaction.user_id == ctx.author.id:
             if str(reaction.emoji) == reactions[0]:
-                await ctx.send(reactions[0])
+                await msg.edit(":regional_indicator_o: Overview\n:regional_indicator_m: Moderation\n:regional_indicator_r: Roles")
             elif str(reaction.emoji) == reactions[1]:
                 await ctx.send(reactions[1])
 
