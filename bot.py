@@ -2,6 +2,8 @@ import discord
 import os
 import discord.utils
 from utils.hackformat import HackFormatBot
+from pathlib import Path
+from functools import reduce
 
 
 async def get_pre(bot, message):
@@ -17,13 +19,22 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name=f"{bot.config['defaultprefix']}help"))
     print("Started!")
 
+
+def format_cog(path):
+    replacements = (('\\', '.'), ('.py', ''))
+    for r in replacements:
+        path = path.replace(*r)
+
+    return path
+
+
 if __name__ == "__main__":
-    for cog in os.listdir("cogs"):
-        if cog.endswith(".py"):
-            try:
-                bot.load_extension(f"cogs.{cog.replace('.py', '')}")
-                print(f"Loaded cog {cog}")
-            except Exception as e:
-                print(f"{e.__class__.__name__} Caused by loading cog {cog}\n {e}")
+    for cog in Path("cogs").glob('**/*.py'):
+        cog_path = format_cog(str(cog))
+        try:
+            bot.load_extension(cog_path)
+            print(f"Loaded cog {cog_path}")
+        except Exception as e:
+            print(f"{e.__class__.__name__} Caused by loading cog {cog}: {e}")
 
     bot.run(bot.config["token"])
