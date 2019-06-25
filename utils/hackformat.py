@@ -2,10 +2,10 @@ from discord.ext import commands
 import discord
 import json
 
+#icons from https://flaticon.com/
 
 class HackFormatContext(commands.Context):
     async def confirm(self, **kwargs):
-        """Helper for messages where the user answers a yes or no question"""
         def check(reaction, user):
             return self.author.id == user.id and reaction.emoji in ['👎', '👍']
 
@@ -28,11 +28,8 @@ class HackFormatContext(commands.Context):
         return False
 
     async def emoji_choice(self, reactions, **kwargs):
-        """Helper for messages where use chooses an emoji. NOTE: only works with unicode emojis"""
         def check(reaction, user):
-            return self.author.id == user.id and ord(reaction.emoji) in reactions.keys()
-
-        reactions = {ord(k): v for (k, v) in reactions.items()}
+            return self.author.id == user.id and reaction.emoji in reactions.keys()
 
         prompt = kwargs.get("prompt", None)
         embed = kwargs.get("embed", None)
@@ -44,11 +41,33 @@ class HackFormatContext(commands.Context):
         msg = await self.send(content=prompt, embed=embed)
 
         for reaction in reactions.keys():
-            await msg.add_reaction(chr(reaction))
+            await msg.add_reaction(reaction)
 
         reaction, member = await self.bot.wait_for('reaction_add', check=check, timeout=timeout)
 
-        return reactions.get(ord(reaction.emoji))
+        return reactions.get(str(reaction.emoji))
+
+    async def error(self, error, title=None, **kwargs):
+        title = title or "Error"
+        colour = kwargs.get("colour", 0xff0000)
+        icon = kwargs.get("icon", "https://image.flaticon.com/icons/svg/148/148766.svg)
+        thumbnail = kwargs.get("image", None)
+        await ctx.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thum))
+
+
+    async def done(self, description, title=None, **kwargs):
+        title = title or "Done"
+        colour = kwargs.get("colour", 0x00ff00)
+        icon = kwargs.get("icon", "https://image.flaticon.com/icons/svg/148/148767.svg")
+        thumbnail = kwargs.get("image", None)
+        await ctx.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thum))
+
+    async def info(self, description, title=None, **kwargs):
+        title = title or "Info"
+        colour = kwargs.get("colour", 0x52e0ff)
+        icon = kwargs.get("icon", "https://image.flaticon.com/icons/svg/339/339763.svg")
+        thumbnail = kwargs.get("image", None)
+        await ctx.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thum))
 
 
 class HackFormatBot(commands.Bot):
@@ -62,4 +81,3 @@ class HackFormatBot(commands.Bot):
 
     async def get_context(self, message, *, cls=None):
         return await super().get_context(message, cls=HackFormatContext)
-
