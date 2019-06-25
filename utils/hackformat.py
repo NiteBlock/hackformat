@@ -50,9 +50,9 @@ class HackFormatContext(commands.Context):
     async def error(self, error, title=None, **kwargs):
         title = title or "Error"
         colour = kwargs.get("colour", 0xff0000)
-        icon = kwargs.get("icon", "https://image.flaticon.com/icons/svg/148/148766.svg)
+        icon = kwargs.get("icon", "https://image.flaticon.com/icons/svg/148/148766.svg")
         thumbnail = kwargs.get("image", None)
-        await ctx.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thum))
+        await ctx.send(embed=discord.Embed(description=error, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
 
 
     async def done(self, description, title=None, **kwargs):
@@ -60,14 +60,14 @@ class HackFormatContext(commands.Context):
         colour = kwargs.get("colour", 0x00ff00)
         icon = kwargs.get("icon", "https://image.flaticon.com/icons/svg/148/148767.svg")
         thumbnail = kwargs.get("image", None)
-        await ctx.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thum))
+        await ctx.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
 
     async def info(self, description, title=None, **kwargs):
         title = title or "Info"
         colour = kwargs.get("colour", 0x52e0ff)
         icon = kwargs.get("icon", "https://image.flaticon.com/icons/svg/339/339763.svg")
         thumbnail = kwargs.get("image", None)
-        await ctx.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thum))
+        await ctx.send(embed=discord.Embed(description=description, colour=colour).set_author(name=title, icon_url=icon).set_thumbnail(url=thumbnail))
 
 
 class HackFormatBot(commands.Bot):

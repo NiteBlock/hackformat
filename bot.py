@@ -7,7 +7,7 @@ from functools import reduce
 
 
 async def get_pre(bot, message):
-    # mentioned or defaultprefix
+    # mentioned or defaultprefix 
     return [bot.user.mention + ' ', '<@!%s> ' % bot.user.id, bot.config["defaultprefix"]]
 
 
