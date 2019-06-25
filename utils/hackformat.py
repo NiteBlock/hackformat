@@ -8,19 +8,46 @@ class HackFormatContext(commands.Context):
         def check(reaction, user):
             return self.author.id == user.id and reaction.emoji in ['👎', '👍']
 
-        prompt = kwargs.get("prompt", "Yes or No?")
+        prompt = kwargs.get("prompt", None)
         embed = kwargs.get("embed", None)
+        timeout = kwargs.get('timeout', 60)
+
+        if prompt is None and embed is None:
+            raise ValueError("You need to define prompt or embed")
 
         msg = await self.send(content=prompt, embed=embed)
 
         await msg.add_reaction('👍')
         await msg.add_reaction('👎')
 
-        reaction = await self.bot.wait_for('reaction_add', check=check, timeout=60)
+        reaction = await self.bot.wait_for('reaction_add', check=check, timeout=timeout)
 
         if reaction[0].emoji == '👍':
             return True
         return False
+
+    async def emoji_choice(self, reactions, **kwargs):
+        def check(reaction, user):
+            return self.author.id == user.id and reaction.emoji in reactions.keys()
+
+        prompt = kwargs.get("prompt", None)
+        embed = kwargs.get("embed", None)
+        timeout = kwargs.get('timeout', 60)
+
+        if prompt is None and embed is None:
+            raise ValueError("You need to define prompt or embed")
+
+        msg = await self.send(content=prompt, embed=embed)
+
+        for reaction in reactions.keys():
+            await msg.add_reaction(reaction)
+
+        reaction, member = await self.bot.wait_for('reaction_add', check=check, timeout=timeout)
+
+        return reactions.get(str(reaction.emoji))
+
+
+
 
 
 class HackFormatBot(commands.Bot):
