@@ -4,7 +4,6 @@ import os
 import json
 import asyncio
 import time
-from discord.ext.commands import Bot
 import random
 import discord.utils
 from utils.hackformat import HackFormatBot

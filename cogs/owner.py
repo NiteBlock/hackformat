@@ -108,10 +108,9 @@ class Owner(commands.Cog):
             'author': ctx.author,
             'message': ctx.message
         }
-        print(code)
+
         env.update(globals())
         formatted_code = f'async def my_func(): \n{textwrap.indent(code, "  ")}'
-        print(formatted_code)
 
         try:
             with redirect_stdout(stdout):
