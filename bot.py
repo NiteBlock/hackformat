@@ -5,17 +5,12 @@ from utils.hackformat import HackFormatBot
 from pathlib import Path
 from functools import reduce
 
-for filename in os.listdir("./cogs"):
-    if filename.endswith(".py"):
-        bot.load_extension(f"cogs.{filename[:-3]}")
-
 async def get_pre(bot, message):
     # mentioned or defaultprefix
     return [bot.user.mention + ' ', '<@!%s> ' % bot.user.id, bot.config["defaultprefix"]]
 
 
 bot = HackFormatBot(command_prefix=get_pre)
-
 
 @bot.event
 async def on_ready():

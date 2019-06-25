@@ -3,7 +3,7 @@ from discord.ext import commands
 import asyncio
 
 
-class reactions(commands.Cog):
+class Reactions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -22,4 +22,4 @@ class reactions(commands.Cog):
                 await ctx.send(reactions[1])
 
 def setup(bot):
-    bot.add_cog(reactions(bot))
+    bot.add_cog(Reactions(bot))
