@@ -1,2 +1,11 @@
-#command to toggle and disable for certain channels/roles also anti spam itself
-#command to toggle and disable for certain channels/roles also anti advertisments itself
+from discord.ext import commands
+
+
+class AntiSpam(commands.Cog):
+    """Cog for AntiSpam and AntiAdvertisement"""
+    def __init__(self, bot):
+        self.bot = bot
+
+
+def setup(bot):
+    bot.add_cog(AntiSpam(bot))

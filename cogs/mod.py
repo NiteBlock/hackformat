@@ -1,18 +1,10 @@
 from discord.ext import commands
 import discord
 
-"""
-Commands in this cog:
-ban, unban
-mute, unmute
-kick, softban (bans and then unbans), invitekick (sends the user an invite and kicks him so she/he can rejoin)
-warn, revokewarn (unwarn)
-purge <user/channel>
-user/bot/guild/channel info
-"""
-
 
 class Moderation(commands.Cog):
+    """Commands to be used for moderation"""
+
     def __init__(self, bot):
         self.bot = bot
 

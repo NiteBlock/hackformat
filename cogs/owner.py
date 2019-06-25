@@ -26,6 +26,8 @@ class Code(commands.Converter):
 
 
 class Owner(commands.Cog):
+    """Owner only commands"""
+    
     def __init__(self, bot):
         self.bot = bot
 
