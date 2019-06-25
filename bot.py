@@ -35,5 +35,5 @@ if __name__ == "__main__":
             print(f"Loaded cog {cog_path}")
         except Exception as e:
             print(f"{e.__class__.__name__} Caused by loading cog {cog}: {e}")
-
     bot.run(bot.config["token"])
+    
