@@ -1,10 +1,5 @@
 import discord
-from discord.ext import commands
 import os
-import json
-import asyncio
-import time
-import random
 import discord.utils
 from utils.hackformat import HackFormatBot
 
