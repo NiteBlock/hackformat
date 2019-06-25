@@ -138,8 +138,11 @@ class Owner(commands.Cog):
                 embed.add_field(name="Console Output", value=f'```py\n{value}```')
             if func_return:
                 embed.add_field(name="Returned", value=f'```py\n{func_return}```')
+            if not embed.fields:
+                embed.description = "Success!"
 
             return await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Owner(bot))
