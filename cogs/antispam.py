@@ -14,9 +14,6 @@ class AntiSpam(commands.Cog):
         async for m in message.channel.history(limit=1, before=message):
             last_msg = m
 
-        print(message.clean_content == last_msg.content)
-        print(last_msg.author.id is message.author.id)
-
         if last_msg.author.id is message.author.id and last_msg.clean_content == message.clean_content:
             try:
                 await message.delete()
