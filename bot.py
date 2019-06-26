@@ -5,12 +5,13 @@ from utils.hackformat import HackFormatBot
 from pathlib import Path
 from functools import reduce
 
-async def get_pre(bot, message):
-    # mentioned or defaultprefix
+def get_pre(bot, message):
+    # mentioned or defaultprefix 
     return [bot.user.mention + ' ', '<@!%s> ' % bot.user.id, bot.config["defaultprefix"]]
 
 
 bot = HackFormatBot(command_prefix=get_pre)
+bot.remove_command("help")
 
 @bot.event
 async def on_ready():
@@ -19,7 +20,7 @@ async def on_ready():
 
 
 def format_cog(path):
-    replacements = (('\\', '.'), ('.py', ''))
+    replacements = (('/', '.'), ('.py', ''))
     for r in replacements:
         path = path.replace(*r)
 
@@ -34,5 +35,5 @@ if __name__ == "__main__":
             print(f"Loaded cog {cog_path}")
         except Exception as e:
             print(f"{e.__class__.__name__} Caused by loading cog {cog}: {e}")
-
     bot.run(bot.config["token"])
+    

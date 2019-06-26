@@ -5,29 +5,13 @@ from contextlib import redirect_stdout
 import textwrap
 import io
 import traceback
-
-
-def is_owner():
-    async def predicate(ctx):
-        with open("config.json", "r") as r:
-            return ctx.author.id in json.load(r)["owners"]
-    return commands.check(predicate)
-
-
-class Code(commands.Converter):
-    async def convert(self, ctx, arg):
-        return self.cleanup_code(arg)
-
-    @staticmethod
-    def cleanup_code(code):
-        if code.startswith('```') and code.endswith('```'):
-            return code.strip("```").strip("\n")
-        return code.strip('\n')
+from utils.converters import Code
+from utils.checks import is_admin
 
 
 class Owner(commands.Cog):
     """Owner only commands"""
-    
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -36,72 +20,70 @@ class Owner(commands.Cog):
         await ctx.send_help(self.owner)
 
     @owner.command(name="load")
-    @is_owner()
-    async def load_extension(self, ctx, extension: str):
+    @is_admin()
+    async def owner_load_extension(self, ctx, extension: str):
         """Load an Extension"""
+        cog = extension.replace("cogs.", "")
+        if not extension.startswith("cogs."):
+            extension = "cogs." + extension
 
-        embed = discord.Embed(title="Load Extension")
         try:
             self.bot.load_extension(name=extension)
-            embed.add_field(name=extension, value="Success!")
-            color = discord.Color.green()
+            await ctx.done(f"Loaded extention!", cog)
         except commands.ExtensionAlreadyLoaded:
-            embed.add_field(name=extension, value="Success! Was Already Loaded!")
-            color = discord.Color.green()
+            await ctx.info(f"Extention was already loaded!")
         except Exception as e:
-            embed.add_field(name=extension, value="Failure! \n Error: " + str(e))
-            color = discord.Color.red()
+            await ctx.error(f"Failure! \n Error: {e}", cog)
 
-        embed._colour = color
-        await ctx.send(embed=embed)
+
 
     @owner.command(name="unload")
-    @is_owner()
-    async def unload(self, ctx, extension: str):
+    @is_admin()
+    async def owner_unload(self, ctx, extension: str):
         """Unload an extension"""
+        cog = extension.replace("cogs.", "")
+        if not extension.startswith("cogs."):
+            extension = "cogs." + extension
 
-        embed = discord.Embed(title="Unload Extension")
         try:
             self.bot.unload_extension(name=extension)
-            embed.add_field(name=extension, value="Success!")
-            color = discord.Color.green()
+            await ctx.done(f"Unloaded extention!", cog)
+        except commands.ExtensionNotLoaded:
+            await ctx.error(f"The extention was never loaded!")
         except Exception as e:
-            embed.add_field(name=extension, value="Failure! \n Error: " + str(e))
-            color = discord.Color.red()
-
-        embed._colour = color
-        await ctx.send(embed=embed)
+            await ctx.error(f"Failure! \n Error: {e}", cog)
 
     @owner.command(name="reload")
-    @is_owner()
-    async def reload(self, ctx, extension: str):
+    @is_admin()
+    async def owner_reload(self, ctx, extension: str):
         """Reload an extension"""
+        cog = extension.replace("cogs.", "")
+        if not extension.startswith("cogs."):
+            extension = "cogs." + extension
 
-        embed = discord.Embed(title="Reload Extension")
         try:
             self.bot.reload_extension(name=extension)
-            embed.add_field(name=extension, value="Success!")
-            color = discord.Color.green()
+            await ctx.done(f"Reloaded extention!", cog)
         except Exception as e:
-            embed.add_field(name=extension, value="Failure! \n Error: " + str(e))
-            color = discord.Color.red()
+            await ctx.error(f"Failure! \n Error: {e}", cog)
 
-        embed._colour = color
-        await ctx.send(embed=embed)
 
     @owner.command(name="list")
-    @is_owner()
-    async def list(self, ctx):
+    @is_admin()
+    async def owner_list(self, ctx):
         embed = discord.Embed(title="Extensions", color=discord.Color.green())
         for extension in self.bot.extensions:
             embed.add_field(name=extension, value="Loaded!", inline=False)
         await ctx.send(embed=embed)
 
     @owner.command(name="eval")
-    @is_owner()
+    @is_admin()
     async def owner_eval(self, ctx, *, code: Code):
+        # Interface to store console output
         stdout = io.StringIO()
+        embed = discord.Embed(title="Eval Code")
 
+        # variable to add to environment when we compile code
         env = {
             'ctx': ctx,
             'bot': self.bot,
@@ -111,29 +93,43 @@ class Owner(commands.Cog):
             'message': ctx.message
         }
 
+        # add vars to env
         env.update(globals())
+
+        # wrap code in a func
         formatted_code = f'async def my_func(): \n{textwrap.indent(code, "  ")}'
 
+        # Compile code into usable object
         try:
             with redirect_stdout(stdout):
                 exec(formatted_code, env)
         except Exception as e:
-            return await ctx.send(f'```py\n{e.__class__.__name__}: {e}\n```')
-
+            embed._colour = discord.Color.red()
+            embed.add_field(name="Error", value=f'```py\n{e.__class__.__name__}: {e}\n```')
+            return await ctx.send(embed=embed)
+        # get function from env
         func = env['my_func']
 
+        # call func and capture output
         try:
             with redirect_stdout(stdout):
                 func_return = await func()
-        except:
+        except Exception:
             value = stdout.getvalue()
-            await ctx.send(f'```py\n{value}{traceback.format_exc()}\n```')
+            embed._colour = discord.Color.red()
+            embed.add_field(name="Error", value=f'```py\n{value}{traceback.format_exc()}\n```')
+            return await ctx.send(embed=embed)
         else:
             value = stdout.getvalue()
+            embed._colour = discord.Color.green()
+            if value:
+                embed.add_field(name="Console Output", value=f'```py\n{value}```')
+            if func_return:
+                embed.add_field(name="Returned", value=f'```py\n{func_return}```')
+            if not embed.fields:
+                embed.description = "Success!"
 
-            if not func_return:
-                return await ctx.send(f"""```py\n Output: \n {value}```""")
-            return await ctx.send(f"""```py\n Output: \n {value} \n Returned: \n {func_return} ```""")
+            return await ctx.send(embed=embed)
 
 
 def setup(bot):
