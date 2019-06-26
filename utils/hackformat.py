@@ -30,7 +30,7 @@ class HackFormatContext(commands.Context):
 
     async def emoji_choice(self, reactions, **kwargs):
         def check(reaction, user):
-            return self.author.id == user.id and reaction.emoji in m,..keys()
+            return self.author.id == user.id and reaction.emoji in reactions.keys()
 
         prompt = kwargs.get("prompt", None)
         embed = kwargs.get("embed", None)
