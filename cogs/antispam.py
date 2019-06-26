@@ -1,11 +1,32 @@
+import discord
 from discord.ext import commands
+import aiohttp
 
 
 class AntiSpam(commands.Cog):
-    """Cog for AntiSpam and AntiAdvertisement"""
+
     def __init__(self, bot):
         self.bot = bot
 
+    async def spam(self, message):
+        ctx = await self.bot.get_context(message)
 
-def setup(bot):
-    bot.add_cog(AntiSpam(bot))
+        async for m in message.channel.history(limit=1, before=message):
+            last_msg = m
+
+        print(message.clean_content == last_msg.content)
+        print(last_msg.author.id is message.author.id)
+
+        if last_msg.author.id is message.author.id and last_msg.clean_content == message.clean_content:
+            try:
+                await message.delete()
+            except discord.Forbidden:
+                await ctx.send("I am not able to delete that.")
+            except Exception as e:
+                return
+
+
+def setup(client):
+    n = AntiSpam(client)
+    client.add_listener(n.spam, "on_message")
+    client.add_cog(n)
