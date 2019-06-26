@@ -120,10 +120,7 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     async def invite(self, ctx):
 
-        embed = discord.Embed(color=discord.Color.green())
-        embed.add_field(name="You can invite me here:", value="https://discordapp.com/api/oauth2/authorize?client_id=591698923916361763&permissions=8&scope=bot")
-
-        await ctx.send(embed=embed)
+        await ctx.invite("[invite link](https://google.com/)%22)")
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
