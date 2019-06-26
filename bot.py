@@ -20,7 +20,7 @@ async def on_ready():
 
 
 def format_cog(path):
-    replacements = (('/', '.'), ('.py', ''))
+    replacements = (('/', '.'), ('\\', '.'), ('.py', ''))
     for r in replacements:
         path = path.replace(*r)
 
@@ -34,6 +34,6 @@ if __name__ == "__main__":
             bot.load_extension(cog_path)
             print(f"Loaded cog {cog_path}")
         except Exception as e:
-            print(f"{e.__class__.__name__} Caused by loading cog {cog}: {e}")
+            print(f"{e.__class__.__name__} Caused by loading cog {cog_path}: {e}")
     bot.run(bot.config["token"])
-    
+
