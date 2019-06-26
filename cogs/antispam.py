@@ -18,7 +18,7 @@ class AntiSpam(commands.Cog):
             try:
                 await message.delete()
             except discord.Forbidden:
-                await ctx.send("I am not able to delete that.")
+                await ctx.send("I'm sorry, an error had occurred an I am unable to delete that spam.")
             except Exception as e:
                 return
 
