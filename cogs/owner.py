@@ -7,7 +7,9 @@ import io
 import traceback
 from utils.converters import Code
 from utils.checks import is_admin
-
+from datetime import datetime as dt
+import pymongo
+import random
 
 class Owner(commands.Cog):
     """Owner only commands"""
@@ -90,7 +92,11 @@ class Owner(commands.Cog):
             'guild': ctx.guild,
             'channel': ctx.channel,
             'author': ctx.author,
-            'message': ctx.message
+            'message': ctx.message,
+            'dt': dt,
+            'pymongo': pymongo,
+            'random': random,
+            'self' : self
         }
 
         # add vars to env

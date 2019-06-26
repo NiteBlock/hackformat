@@ -35,6 +35,7 @@ class Moderation(commands.Cog):
         await ctx.Done(f"{member} has been kicked!")
 
     @commands.command()
+    @commands.guild_only()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, reason="No given reason"):
 
