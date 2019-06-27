@@ -64,6 +64,7 @@ class Fun(commands.Cog):
             if score[0] != max and score[1] != max:
                 embed = discord.Embed(title=f"Rock Paper or Scissors?", color=0x00ff00)
                 embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url_as(format='jpg', size=1024))
+                embed.set_footer(text=f"First to: {max} | Current Score: {score}")
                 await msg.edit(embed=embed)
                 reactions = ["🇷", "🇵", "🇸"]
                 for r in reactions:
@@ -85,54 +86,62 @@ class Fun(commands.Cog):
                     bchoice = "Scissors"
                 if str(reaction.emoji) == choice:
                     embed=discord.Embed(title=f"It appears we both chose {bchoice} the score is still {score}", color=0x00ff00)
+                    embed.set_footer(text=f"First to: {max} | Current Score: {score}")
                     await msg.edit(embed=embed)
                     await msg.clear_reactions()
                     await asyncio.sleep(2)
                 elif str(reaction.emoji) == "🇷" and choice == "🇸":
                     score[0] = score[0] + 1
                     embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
+                    embed.set_footer(text=f"First to: {max} | Current Score: {score}")
                     await msg.edit(embed=embed)
                     await msg.clear_reactions()
                     await asyncio.sleep(2)
                 elif str(reaction.emoji) == "🇵" and choice == "🇷":
                     score[0] = score[0] + 1
                     embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
+                    embed.set_footer(text=f"First to: {max} | Current Score: {score}")
                     await msg.edit(embed=embed)
                     await msg.clear_reactions()
                     await asyncio.sleep(2)
                 elif str(reaction.emoji) == "🇸" and choice == "🇵":
                     score[0] = score[0] + 1
                     embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
+                    embed.set_footer(text=f"First to: {max} | Current Score: {score}")
                     await msg.edit(embed=embed)
                     await msg.clear_reactions()
                     await asyncio.sleep(2)
                 elif choice == "🇷" and str(reaction.emoji) == "🇸":
                     score[1] = score[1] + 1
                     embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
+                    embed.set_footer(text=f"First to: {max} | Current Score: {score}")
                     await msg.edit(embed=embed)
                     await msg.clear_reactions()
                     await asyncio.sleep(2)
                 elif choice == "🇵" and str(reaction.emoji) == "🇷":
                     score[1] = score[1] + 1
                     embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
+                    embed.set_footer(text=f"First to: {max} | Current Score: {score}")
                     await msg.edit(embed=embed)
                     await msg.clear_reactions()
                     await asyncio.sleep(2)
                 elif choice == "🇸" and str(reaction.emoji) == "🇵":
                     score[1] = score[1] + 1
                     embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
+                    embed.set_footer(text=f"First to: {max} | Current Score: {score}")
                     await msg.edit(embed=embed)
                     await msg.clear_reactions()
                     await asyncio.sleep(2)
             elif score[0] == max:
                 embed = discord.Embed(title=f"Well played! You won nothing!", color=0x00ff00)
+                embed.set_footer(text=f"First to: {max} | Score: {score}")
                 await msg.edit(embed=embed)
                 playing = False
             elif score[1] == max:
                 embed = discord.Embed(title=f"Well played! It was a fun game, but you lose!", color=0x00ff00)
+                embed.set_footer(text=f"First to: {max} | Score: {score}")
                 await msg.edit(embed=embed)
                 playing = False
-
 
 def setup(bot):
     bot.add_cog(Fun(bot))
