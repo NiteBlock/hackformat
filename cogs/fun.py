@@ -59,55 +59,70 @@ class Fun(commands.Cog):
         await message.delete()
         playing = True
         while playing == True:
-            choices = ["rock", "paper", "scissors"]
+            choices = ["🇷", "🇵", "🇸"]
             choice = random.choice(choices)
             if score[0] != max and score[1] != max:
                 embed = discord.Embed(title=f"Rock Paper or Scissors?", color=0x00ff00)
                 embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar_url_as(format='jpg', size=1024))
                 await msg.edit(embed=embed)
-                def check2(m):
-                    return m.author == ctx.author and m.channel == ctx.channel
-                message = await self.bot.wait_for("message", check=check2)
-                if message.content.lower() == choice:
-                    embed=discord.Embed(title=f"It appears we both chose {choice} the score is still {score}", color=0x00ff00)
+                reactions = ["🇷", "🇵", "🇸"]
+                for r in reactions:
+                    await msg.add_reaction(r)
+                def check2(reaction, user):
+                    return ctx.author.id == user.id and str(reaction.emoji) in reactions
+                reaction, user = await self.bot.wait_for("reaction_add", check=check2)
+                if str(reaction.emoji) == "🇷":
+                    uchoice = "Rock"
+                if str(reaction.emoji) == "🇵":
+                    uchoice = "Paper"
+                if str(reaction.emoji) == "🇸":
+                    uchoice = "Scissors"
+                if choice == "🇷":
+                    bchoice = "Rock"
+                if choice == "🇵":
+                    bchoice = "Paper"
+                if choice == "🇸":
+                    bchoice = "Scissors"
+                if str(reaction.emoji) == choice:
+                    embed=discord.Embed(title=f"It appears we both chose {bchoice} the score is still {score}", color=0x00ff00)
                     await msg.edit(embed=embed)
-                    await message.delete()
+                    await msg.clear_reactions()
                     await asyncio.sleep(2)
-                elif message.content.lower() == "rock" and choice == "scissors":
+                elif str(reaction.emoji) == "🇷" and choice == "🇸":
                     score[0] = score[0] + 1
-                    embed = discord.Embed(title=f"You chose {message.content} and i chose {choice}. The score is now {score}", color=0x00ff00)
+                    embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
                     await msg.edit(embed=embed)
-                    await message.delete()
+                    await msg.clear_reactions()
                     await asyncio.sleep(2)
-                elif message.content.lower() == "paper" and choice == "rock":
+                elif str(reaction.emoji) == "🇵" and choice == "🇷":
                     score[0] = score[0] + 1
-                    embed = discord.Embed(title=f"You chose {message.content} and i chose {choice}. The score is now {score}", color=0x00ff00)
+                    embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
                     await msg.edit(embed=embed)
-                    await message.delete()
+                    await msg.clear_reactions()
                     await asyncio.sleep(2)
-                elif message.content.lower() == "scissors" and choice == "paper":
+                elif str(reaction.emoji) == "🇸" and choice == "🇵":
                     score[0] = score[0] + 1
-                    embed = discord.Embed(title=f"You chose {message.content} and i chose {choice}. The score is now {score}", color=0x00ff00)
+                    embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
                     await msg.edit(embed=embed)
-                    await message.delete()
+                    await msg.clear_reactions()
                     await asyncio.sleep(2)
-                elif choice == "rock" and message.content.lower() == "scissors":
+                elif choice == "🇷" and str(reaction.emoji) == "🇸":
                     score[1] = score[1] + 1
-                    embed = discord.Embed(title=f"You chose {message.content} and i chose {choice}. The score is now {score}", color=0x00ff00)
+                    embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
                     await msg.edit(embed=embed)
-                    await message.delete()
+                    await msg.clear_reactions()
                     await asyncio.sleep(2)
-                elif choice == "paper" and message.content.lower() == "rock":
+                elif choice == "🇵" and str(reaction.emoji) == "🇷":
                     score[1] = score[1] + 1
-                    embed = discord.Embed(title=f"You chose {message.content} and i chose {choice}. The score is now {score}", color=0x00ff00)
+                    embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
                     await msg.edit(embed=embed)
-                    await message.delete()
+                    await msg.clear_reactions()
                     await asyncio.sleep(2)
-                elif choice == "scissors" and message.content.lower() == "paper":
+                elif choice == "🇸" and str(reaction.emoji) == "🇵":
                     score[1] = score[1] + 1
-                    embed = discord.Embed(title=f"You chose {message.content} and i chose {choice}. The score is now {score}", color=0x00ff00)
+                    embed = discord.Embed(title=f"You chose {uchoice} and i chose {bchoice}. The score is now {score}", color=0x00ff00)
                     await msg.edit(embed=embed)
-                    await message.delete()
+                    await msg.clear_reactions()
                     await asyncio.sleep(2)
             elif score[0] == max:
                 embed = discord.Embed(title=f"Well played! You won nothing!", color=0x00ff00)
