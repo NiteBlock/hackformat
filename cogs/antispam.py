@@ -9,6 +9,8 @@ class AntiSpam(commands.Cog):
         self.bot = bot
 
     async def spam(self, message):
+        if message.author.bot:
+            return
         ctx = await self.bot.get_context(message)
 
         async for m in message.channel.history(limit=1, before=message):

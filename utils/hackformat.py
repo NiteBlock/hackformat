@@ -34,9 +34,10 @@ class HackFormatContext(commands.Context):
     async def ask_channel(self, **kwargs):
         title = kwargs.get("title", "Choose a channel")
         description = kwargs.get("description", "Mention a channel to choose it!")
-        msg = await self.info(title, description, icon="null")
+        await self.info(title, description, icon="null")
         def check(m):
-            return msg.channel == m.channel and m.author.id == self.author.id
+            return self.channel == m.channel and m.author.id == self.author.id
+        
         try:
             m = await self.bot.wait_for("message", check=check, timeout=kwargs.get("timeout", 60))
         except TimeoutError:
@@ -50,7 +51,7 @@ class HackFormatContext(commands.Context):
 
     async def emoji_choice(self, reactions, **kwargs):
         def check(reaction, user):
-            return self.author.id == user.id and reaction.emoji in reactions.keys()
+            return self.author.id == user.id and str(reaction.emoji) in reactions
 
         prompt = kwargs.get("prompt", None)
         embed = kwargs.get("embed", None)
@@ -61,24 +62,30 @@ class HackFormatContext(commands.Context):
 
         msg = await self.send(content=prompt, embed=embed)
 
-        for reaction in reactions.keys():
-            await msg.add_reaction(reaction)
+        for reaction in reactions:
+            await msg.add_reaction(str(reaction))
 
         try:
             reaction, member = await self.bot.wait_for('reaction_add', check=check, timeout=timeout)
         except TimeoutError:
             raise commands.CommandError("Timed out!")
-        return reactions.get(str(reaction.emoji))
+        return reactions[str(reaction.emoji)]
+
+    async def unknownerror(self, error, title=None, **kwargs):
+        x = await self.send(**em(error, title, "unknown", **kwargs))
+        return x
 
     async def error(self, error, title=None, **kwargs):
-        return await self.send(**em(error, title, "error", **kwargs))
+        x = await self.send(**em(error, title, "error", **kwargs))
+        return x
 
     async def done(self, description, title=None, **kwargs):
-        return await self.send(**em(description, title, "done", **kwargs))
+        x = await self.send(**em(description, title, "done", **kwargs))
+        return x
 
     async def info(self, description, title=None, **kwargs):
-        return await self.send(**em(description, title, "info", **kwargs))
-
+        x = await self.send(**em(description, title, "infos", **kwargs))
+        return x
 
 class HackFormatHelp(commands.HelpCommand):
     def __init__(self, **options):
