@@ -20,7 +20,7 @@ class AntiSpam(commands.Cog):
             except discord.Forbidden:
                 await ctx.send("I am not able to delete that.")
             except Exception as e:
-                return
+                raise commands.CommandError(e)
 
 
 def setup(client):

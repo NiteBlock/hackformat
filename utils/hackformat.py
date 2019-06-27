@@ -75,6 +75,9 @@ class HackFormatContext(commands.Context):
         return await self.send(**em(error, title, "error", **kwargs))
 
 
+    async def unknownerror(self, error, title=None, **kwargs):
+        return await self.send(**em(error, title, "unknownerror", **kwargs))
+
     async def done(self, description, title=None, **kwargs):
         return await self.send(**em(description, title, "done", **kwargs))
 

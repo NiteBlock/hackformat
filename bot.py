@@ -11,7 +11,6 @@ def get_pre(bot, message):
 
 
 bot = HackFormatBot(command_prefix=get_pre)
-bot.remove_command("help")
 
 @bot.event
 async def on_ready():

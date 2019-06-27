@@ -6,7 +6,7 @@ ignore = [commands.CommandNotFound, commands.TooManyArguments]
 # Error Messages
 error_response = {
     commands.NoPrivateMessage: "This command doesn't work in private messges!",
-    commands.MissingPermissions: "You are missing the **{e.missingx_perms[0]}** permissions to do this!",
+    commands.MissingPermissions: "You are missing the **{e.missing_perms[0]}** permissions to do this!",
     commands.BotMissingPermissions : "It seams the bot doesnt have **administrator** permissions",
     commands.CommandOnCooldown: "This command is on a cooldown: Retry after {e.retry.after}. You can only use this command {e.cooldown.rate} every {e.cooldown.per} Seconds!",
     commands.BadArgument: "Oops an invalid argument has been passed!",
@@ -31,7 +31,7 @@ class ErrorHandler(commands.Cog):
                 await ctx.error(m.format(e=error))
                 return
         
-        await ctx.error(str(error))
+        await ctx.unknownerror(str(error))
 
 
 def setup(bot):
