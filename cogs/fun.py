@@ -33,7 +33,7 @@ class Fun(commands.Cog):
     async def kill(self, ctx, target: discord.Member):
         target = target.name
         bodypart = ["Heart", "Head", "Mouth", "Eye"]
-        killmsg = [f"You stab {target} straight throught the {random.choice(bodypart)}!", f"You run at {target} but slip and stab yourself!", f"You shoot {target} in the {bodypart} and they die!"]
+        killmsg = [f"You stab {target} straight throught the {random.choice(bodypart)}!", f"You run at {target} but slip and stab yourself!", f"You shoot {target} in the {random.choice(bodypart)} and they die!"]
         embed = discord.Embed(title=random.choice(killmsg), color=0x00ff00)
         await ctx.send(embed=embed)
     
@@ -46,6 +46,7 @@ class Fun(commands.Cog):
     @commands.command()
     async def rps(self, ctx, playing = True):
         score = [0, 0]
+        max = 3
         choices = ["rock", "paper", "scissors"]
         choice = random.choice(choices)
         embed = discord.Embed(title="What score would you like to play to?\nDefault: 3", color=0x00ff00)
@@ -54,10 +55,7 @@ class Fun(commands.Cog):
         def check(m):
             return m.author == ctx.author and m.channel == ctx.channel
         message = await self.bot.wait_for("message", check=check)
-        if int(max) == max:
-            max = message[0]
-        else:
-            max = 3
+        max = int(message.content)
         await message.delete()
         playing = True
         while playing == True:
