@@ -30,12 +30,13 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member: discord.Member, reason="No given reason"):
+    async def kick(self, ctx, member: discord.Member, reason=None):
 
         if member is ctx.author:
             raise commands.CommandError("You cant kick yourself!")
-        
-        embed = discord.Embed(colour=discord.Colour.red(), title=f"You have been kicked from {ctx.guild.name} for {reason}!")
+
+        embed = discord.Embed(colour=discord.Colour.red(),
+                              title=f"You have been kicked from {ctx.guild.name} for {reason}!")
 
         await member.send(embed=embed)
         await ctx.guild.kick(member, reason=reason)
@@ -44,12 +45,13 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member, reason="No given reason"):
+    async def ban(self, ctx, member: discord.Member, reason=None):
 
         if member == ctx.author:
             raise commands.CommandError("You can't ban yourself!")
 
-        embed = discord.Embed(colour=discord.Colour.red(), title=f"You have been banned from {ctx.guild.name} for {reason}!")
+        embed = discord.Embed(colour=discord.Colour.red(),
+                              title=f"You have been banned from {ctx.guild.name} for {reason}!")
 
         await member.send(embed=embed)
         await ctx.guild.ban(member)
@@ -107,49 +109,17 @@ class Moderation(commands.Cog):
         embed.add_field(name="ID:", value=member.id, inline=False)
         embed.add_field(name="Username:", value=member.name, inline=True)
         embed.add_field(name="Display Name:", value=member.display_name, inline=True)
-        embed.add_field(name="Account created:", value=member.created_at.strftime("%a, %d %B %Y, %I:%M %p UTC"), inline=False)
+        embed.add_field(name="Account created:", value=member.created_at.strftime("%a, %d %B %Y, %I:%M %p UTC"),
+                        inline=False)
         embed.add_field(name="Joined at:", value=member.joined_at.strftime("%a, %d %B %Y, %I:%M %p UTC"), inline=False)
 
         embed.add_field(name="Top Role:", value=member.top_role.mention, inline=True)
-        embed.add_field(name=f"Roles ({len(member.roles)})", value=" ".join([role.mention for role in member.roles]), inline=True)
+        embed.add_field(name=f"Roles ({len(member.roles)})", value=" ".join([role.mention for role in member.roles]),
+                        inline=True)
         embed.add_field(name="Bot?", value=member.bot, inline=False)
 
         await ctx.send(embed=embed)
 
-    @commands.command()
-    @commands.guild_only()
-    async def help(self, ctx):
-
-     embed = discord.Embed(
-     color = discord.Color.green())
-
-     embed.set_author(name="Help")
-     embed.add_field(name="+enable (spam/swear/ad)", value="enables the antispam, swear or ad (depending on what the user chooses, ADMINS ONLY)", inline=False)
-     embed.add_field(name="+disable (spam/swear/ad)", value ="disables the antispam, swear or ad (depending on what the user chooses, ADMINS ONLY)", inline=False)
-     embed.add_field(name="+kick", value ="Kicks the specified user (Admin only)", inline=False)
-     embed.add_field(name="+unmute", value ="Unmutes the specified user (Admin only)", inline=False)
-     embed.add_field(name="+ban", value ="Bans the specified user (Admin only)", inline=False)
-     embed.add_field(name="+warn", value ="Warns the desired player", inline=False)
-     embed.add_field(name="+info", value ="Shows your desired player's server-info", inline=False)
-     embed.add_field(name="+invite", value ="sends back an invite link for the bot", inline=False)
-     embed.add_field(name="+support", value ="Crates a ticket", inline=False)
-     embed.add_field(name="+help", value ="Shows this", inline=False)
-     embed.add_field(name="+purge", value = "Clears X amount of messages (Admin Only)", inline=False)
-     embed.add_field(name="+format", value = "sends out a message in a desired form (Admin Only)", inline=False)
-     embed.add_field(name="+eval", value = "evals a code", inline=False)
-     embed.add_field(name="+sudo", value = "Sudos a player (Admin only)", inline=False)
-     embed.add_field(name="+db", value = "update/get/drop> <datebase> <collection> <data>", inline=False)
-     embed.add_field(name="+reactionaction", value="ReactionRole, but for more  than roles", inline=False)
-     embed.add_field(name="+8ball", value ="Answers a yes or no question from the beyond", inline=False)
-     embed.add_field(name="+square", value ="Times the wanted number by itself (Squares it)", inline=False)
-     embed.add_field(name="+avatar", value="Shows specified user's profile pciture", inline=False)
-     embed.add_field(name="+Divied", value="Divides two numbers", inline=False)
-     embed.add_field(name="+Add", value="Adds two numbers", inline=False)
-     embed.add_field(name="+Subtract", value="Subtracts two numbers", inline=False)
-     embed.add_field(name="+Multiply", value="Multiplies two numbers", inline=False)
-     embed.add_field(name="+random", value="Generates a random password (Customizable)", inline=False)
-
-     await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Moderation(bot))

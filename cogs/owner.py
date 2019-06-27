@@ -11,13 +11,14 @@ from datetime import datetime as dt
 import pymongo
 import random
 
+
 class Owner(commands.Cog):
     """Owner only commands"""
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(name="owner", invoke_without_command=True)
+    @commands.group(name="owner", invoke_without_command=True, hidden=True)
     async def owner(self, ctx):
         await ctx.send_help(self.owner)
 
@@ -36,8 +37,6 @@ class Owner(commands.Cog):
             await ctx.info(f"Extention was already loaded!")
         except Exception as e:
             await ctx.error(f"Failure! \n Error: {e}", cog)
-
-
 
     @owner.command(name="unload")
     @is_admin()
@@ -69,7 +68,6 @@ class Owner(commands.Cog):
         except Exception as e:
             await ctx.error(f"Failure! \n Error: {e}", cog)
 
-
     @owner.command(name="list")
     @is_admin()
     async def owner_list(self, ctx):
@@ -93,13 +91,10 @@ class Owner(commands.Cog):
             'channel': ctx.channel,
             'author': ctx.author,
             'message': ctx.message,
-            'dt': dt,
-            'pymongo': pymongo,
-            'random': random,
-            'self' : self
+            'self': self
         }
 
-        # add vars to env
+        # add globals to env
         env.update(globals())
 
         # wrap code in a func

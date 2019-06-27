@@ -6,9 +6,13 @@ class Format(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(aliases=["format", "new"])
-    @commands.has_permissions(manage_server=True)
-    async def new_format(self, ctx):
+    @commands.group(name="format")
+    async def format(self, ctx):
+        pass
+
+    @commands.has_permissions(administrator=True)
+    @format.command(name="new")
+    async def format_new(self, ctx):
         if await ctx.confirm(**em("React with :thumbsup: to confirm!", "Would you like to create a new format?", "info", icon="null")):
         
             channel = await ctx.ask_channel("What channel do you want the format to take effect in?")
