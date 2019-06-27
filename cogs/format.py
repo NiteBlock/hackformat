@@ -8,6 +8,7 @@ class Format(commands.Cog):
 
     @commands.group(name="format")
     async def format(self, ctx):
+        await ctx.send_group_help(self.format)
         pass
 
     @commands.has_permissions(administrator=True)

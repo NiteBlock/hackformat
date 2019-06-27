@@ -27,8 +27,8 @@ class HackFormatContext(commands.Context):
             reaction, member = await self.bot.wait_for('reaction_add', check=check, timeout=timeout)
         except TimeoutError:
             raise commands.CommandError("Timed out!")
-        if reaction[0].emoji == '👍':
-            return True
+        if reaction.emoji == '👍':
+            return True, msg
         return False
 
     async def ask_channel(self, **kwargs):
@@ -85,7 +85,7 @@ class HackFormatHelp(commands.HelpCommand):
         super().__init__(**options)
 
     def get_command_signature(self, command):
-        return f"```{self.clean_prefix}{command.qualified_name} {command.signature}```"
+        return f"`{self.clean_prefix}{command.qualified_name} {command.signature}`\n"
 
     async def send_command_help(self, command):
         embed = discord.Embed(title=command.name, description=command.description, color=discord.Color.green())
@@ -95,15 +95,14 @@ class HackFormatHelp(commands.HelpCommand):
         await self.context.send(embed=embed)
 
     async def send_bot_help(self, mapping):
-        embed = discord.Embed(title="All Commands", color=discord.Color.green())
+        embed = em("A list of all commands", "Help", type="info")["embed"]
         for cog, cog_commands in mapping.items():
             if not cog:
-                category = "Uncatagorized"
+                category = "No category"
             else:
                 category = getattr(cog, 'qualified_name')
 
             command_signatures = '\n'.join([self.get_command_signature(c) for c in cog_commands])
-
             if not command_signatures:
                 continue
 

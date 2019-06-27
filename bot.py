@@ -1,3 +1,4 @@
+#icons from https://flaticon.com/ we dont own these
 import discord
 import os
 import discord.utils
