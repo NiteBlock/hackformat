@@ -49,6 +49,23 @@ class HackFormatContext(commands.Context):
                 return channel
         raise commands.CommandError("Not found!")
 
+    async def question(self, **kwargs):
+        title = kwargs.get("title", None)
+        description = kwargs.get("description", None)
+        if title is None or description is None:
+            raise ValueError("You need to define a title and description")
+        await self.info(description, title, icon="null")
+
+        def check(m):
+            return self.channel == m.channel and m.author.id == self.author.id
+        
+        try:
+            m = await self.bot.wait_for("message", check=check, timeout=kwargs.get("timeout", 60))
+        except TimeoutError:
+            raise commands.CommandError("Timed out!")
+        return m
+
+
     async def emoji_choice(self, reactions, **kwargs):
         def check(reaction, user):
             return self.author.id == user.id and str(reaction.emoji) in reactions
