@@ -6,6 +6,7 @@ import time
 from discord.ext.commands import Bot
 import random
 import discord.utils
+from utils.embed import em
 
 
 class Moderation(commands.Cog):
@@ -17,25 +18,26 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, amount=100):
-        if not await ctx.confirm(f"Delete {amount} messages?"):
-            return
-
-        await ctx.channel.purge(limit=amount, check=lambda msg: not msg.pinned)
+    async def purge(self, ctx, amount:int=100):
+        if not await ctx.confirm(**em(" ", title=f"Delete {amount} messages?", type="info")):
+            return await ctx.error("Not purging.", "Process was cancelled", type="error")
+        
+        l = amount + 2 #this is so that it deletes ctx.message and the confirm message as well
+        await ctx.channel.purge(limit=l, check=lambda msg: not msg.pinned)
 
         embed = discord.Embed(color=discord.Color.green())
-        embed.add_field(name="Purged!", value="Done")
-        await ctx.send(embed=embed)
+        await ctx.info("Finished purging " + amount + " messages.", type="done")
 
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member: discord.Member, reason="No given reason"):
+    async def kick(self, ctx, member: discord.Member, reason=None):
 
         if member is ctx.author:
             raise commands.CommandError("You cant kick yourself!")
-        
-        embed = discord.Embed(colour=discord.Colour.red(), title=f"You have been kicked from {ctx.guild.name} for {reason}!")
+
+        embed = discord.Embed(colour=discord.Colour.red(),
+                              title=f"You have been kicked from {ctx.guild.name} for {reason}!")
 
         await member.send(embed=embed)
         await ctx.guild.kick(member, reason=reason)
@@ -44,12 +46,13 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.Member, reason="No given reason"):
+    async def ban(self, ctx, member: discord.Member, reason=None):
 
         if member == ctx.author:
             raise commands.CommandError("You can't ban yourself!")
 
-        embed = discord.Embed(colour=discord.Colour.red(), title=f"You have been banned from {ctx.guild.name} for {reason}!")
+        embed = discord.Embed(colour=discord.Colour.red(),
+                              title=f"You have been banned from {ctx.guild.name} for {reason}!")
 
         await member.send(embed=embed)
         await ctx.guild.ban(member)
@@ -107,20 +110,17 @@ class Moderation(commands.Cog):
         embed.add_field(name="ID:", value=member.id, inline=False)
         embed.add_field(name="Username:", value=member.name, inline=True)
         embed.add_field(name="Display Name:", value=member.display_name, inline=True)
-        embed.add_field(name="Account created:", value=member.created_at.strftime("%a, %d %B %Y, %I:%M %p UTC"), inline=False)
+        embed.add_field(name="Account created:", value=member.created_at.strftime("%a, %d %B %Y, %I:%M %p UTC"),
+                        inline=False)
         embed.add_field(name="Joined at:", value=member.joined_at.strftime("%a, %d %B %Y, %I:%M %p UTC"), inline=False)
 
         embed.add_field(name="Top Role:", value=member.top_role.mention, inline=True)
-        embed.add_field(name=f"Roles ({len(member.roles)})", value=" ".join([role.mention for role in member.roles]), inline=True)
+        embed.add_field(name=f"Roles ({len(member.roles)})", value=" ".join([role.mention for role in member.roles]),
+                        inline=True)
         embed.add_field(name="Bot?", value=member.bot, inline=False)
 
         await ctx.send(embed=embed)
 
-    @commands.command()
-    @commands.guild_only()
-    async def invite(self, ctx):
-
-        await ctx.invite("[invite link](https://google.com/)%22)")
 
 def setup(bot):
     bot.add_cog(Moderation(bot))

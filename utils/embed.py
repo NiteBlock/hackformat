@@ -4,8 +4,13 @@ import discord
 formating = {
     None : ("", "{d}", 0xffffff, None),
     "done": ("Done", "{d}", 0x00ff00, "https://i.imgur.com/78vuV0Q.png"),
+<<<<<<< HEAD
     "error": ("Error", "{d} \n\n**Please join our [support](https://discord.gg/BRtS3CJ) server for help!**", 0xff0000, "https://i.imgur.com/boHCCTy.png"),
     "unknownerror": ("Error", "An error has occured ```{d}```\n\n**Please join our [support](https://discord.gg/BRtS3CJ) server for help!**", 0xff0000, "https://i.imgur.com/boHCCTy.png"),
+=======
+    "error": ("Error", "{d}\n\n**Please join our [support](https://discord.gg/BRtS3CJ) server for help!**", 0xff0000, "https://i.imgur.com/boHCCTy.png"),
+    "unknown": ("Error", "An error has occured ```{d}```\n\n**Please join our [support](https://discord.gg/BRtS3CJ) server for help!**", 0xff0000, "https://i.imgur.com/boHCCTy.png"),
+>>>>>>> 26ad14c96ea232f8accd9b65c17790fcaff8fcce
     "info" : ("Info", "{d}", 0x52e0ff, "https://i.imgur.com/NKkqwUR.png")
 }
 

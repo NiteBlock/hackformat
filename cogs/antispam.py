@@ -9,6 +9,8 @@ class AntiSpam(commands.Cog):
         self.bot = bot
 
     async def spam(self, message):
+        if message.author.bot:
+            return
         ctx = await self.bot.get_context(message)
 
         async for m in message.channel.history(limit=1, before=message):
@@ -18,7 +20,7 @@ class AntiSpam(commands.Cog):
             try:
                 await message.delete()
             except discord.Forbidden:
-                await ctx.send("I am not able to delete that.")
+                await ctx.send("I'm sorry, an error had occurred an I am unable to delete that spam.")
             except Exception as e:
                 raise commands.CommandError(e)
 

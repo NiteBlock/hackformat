@@ -1,9 +1,10 @@
+#icons from https://flaticon.com/ we dont own these
 import discord
 import os
 import discord.utils
-from utils.hackformat import HackFormatBot
+from utils.hackformat import HackFormatBot, HackFormatHelp
 from pathlib import Path
-from functools import reduce
+
 
 def get_pre(bot, message):
     # mentioned or defaultprefix 
@@ -11,6 +12,9 @@ def get_pre(bot, message):
 
 
 bot = HackFormatBot(command_prefix=get_pre)
+
+bot.help_command = HackFormatHelp()
+
 
 @bot.event
 async def on_ready():
