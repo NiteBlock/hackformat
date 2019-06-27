@@ -10,7 +10,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def say(self, ctx, *, text):
-        await ctx.delete()
+        await ctx.message.delete()
         await ctx.send(text)
     
     @commands.command()
@@ -31,7 +31,7 @@ class Fun(commands.Cog):
 
     @commands.command()
     async def kill(self, ctx, target: discord.Member):
-        target = target.mention
+        target = target.name
         bodypart = ["Heart", "Head", "Mouth", "Eye"]
         killmsg = [f"You stab {target} straight throught the {random.choice(bodypart)}!", f"You run at {target} but slip and stab yourself!", f"You shoot {target} in the {bodypart} and they die!"]
         embed = discord.Embed(title=random.choice(killmsg), color=0x00ff00)
@@ -58,6 +58,7 @@ class Fun(commands.Cog):
             max = message[0]
         else:
             max = 3
+        await message.delete()
         playing = True
         while playing == True:
             choices = ["rock", "paper", "scissors"]
