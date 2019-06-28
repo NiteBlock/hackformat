@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import random
 import asyncio
+from utils.embed import em
 
 class Fun(commands.Cog):
     """Just for fun commands"""
@@ -14,29 +15,26 @@ class Fun(commands.Cog):
         await ctx.send(text)
     
     @commands.command()
-    async def rate(self, ctx, p1: discord.Member=None, p2: discord.Member=None):
-        if p1 == None:
-            embed = discord.Embed(title="No person provided!", color=0xff0000)
-            await ctx.send(embed=embed)
-        if p1 != None:
-            if p2 == None:
-                embed = discord.Embed(title="You must provide two people!", color=0xff0000)
-                await ctx.send(embed=embed)
-            elif p1 == p2:
-                embed = discord.Embed(title=f"Something doesn't add up...", color=0xff0000)
-                await ctx.send(embed=embed)
-            else:
-                embed = discord.Embed(title=f"**{p1.name}** and **{p2.name}** are **{random.randint(1,100)}%** compatable!", color=0x00ff00)
-                await ctx.send(embed=embed)
+    async def rate(self, ctx, p1: discord.Member, p2: discord.Member):
+        if p1 == p2:
+            embed = discord.Embed(title=f"Something doesn't add up...", color=0xff0000)
+            return await ctx.send(embed=embed)
+        await ctx.done(f"**{p1.name}** and **{p2.name}** are **{random.randint(1,100)}%** compatable!", "Finished evaluating compatibility!", icon="null")
 
     @commands.command()
     async def kill(self, ctx, target: discord.Member):
-        target = target.name
-        bodypart = ["Heart", "Head", "Mouth", "Eye"]
-        killmsg = [f"You stab {target} straight throught the {random.choice(bodypart)}!", f"You run at {target} but slip and stab yourself!", f"You shoot {target} in the {random.choice(bodypart)} and they die!"]
-        embed = discord.Embed(title=random.choice(killmsg), color=0x00ff00)
-        await ctx.send(embed=embed)
-    
+        if target.id is self.bot.user.id:
+            killmsg = ["You tried to kill me however you were to useless and died while you were doing the command!", "I am undefetable, dont even try or you will die", "You take a runup to hit me but while your on your way I hack into you and you get terminated."]
+            target = "me"
+        else:
+            target = target.name
+            bodypart = ["Heart", "Head", "Mouth", "Eye"]
+            killmsg = [f"You stab {target} straight throught the {random.choice(bodypart)}!", f"You run at {target} but slip and stab yourself!", f"You shoot {target} in the {random.choice(bodypart)} and they die!"]
+        msg = await ctx.done("Attack", f"You are attacking {target}...", icon="null")
+        await asyncio.sleep(random.randint(5,50)/10)
+
+        await msg.edit(**em("Attack finished!", killmsg, "done", icon=None))
+
     @commands.command()
     async def coinflip(self, ctx):
         ht = ["Heads", "Tails"]
