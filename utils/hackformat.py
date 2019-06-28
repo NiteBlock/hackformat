@@ -86,7 +86,7 @@ class HackFormatContext(commands.Context):
             reaction, member = await self.bot.wait_for('reaction_add', check=check, timeout=timeout)
         except TimeoutError:
             raise commands.CommandError("Timed out!")
-        return reactions[str(reaction.emoji)]
+        return reactions[str(reaction.emoji)], msg
 
     async def unknownerror(self, error, title=None, **kwargs):
         x = await self.send(**em(error, title, "unknown", **kwargs))

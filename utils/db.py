@@ -1,9 +1,4 @@
 #here is where db stuff will go down to make things easy for us!
-<<<<<<< HEAD
-import pymongo
-
-def get
-=======
 from pymongo import MongoClient
 
 client = MongoClient("mongodb://localhost:27017/")
@@ -23,4 +18,3 @@ def list(db=None):
     if db is None:
         return client.list_database_names()
     return client[db].list_collection_names()
->>>>>>> 26ad14c96ea232f8accd9b65c17790fcaff8fcce

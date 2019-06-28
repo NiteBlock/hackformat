@@ -10,7 +10,7 @@ from utils.checks import is_admin
 from datetime import datetime as dt
 import pymongo
 import random
-
+from utils import db
 
 class Owner(commands.Cog):
     """Owner only commands"""
@@ -132,6 +132,19 @@ class Owner(commands.Cog):
 
             return await ctx.send(embed=embed)
 
+    @owner.group(invoke_without_command=True)
+    @is_admin()
+    async def db(self, ctx):
+        await ctx.send_help(self.db)
+
+    @db.command()
+    async def update(self, ctx, *args, **kwargs):
+        db.update(*args, **kwargs)
+        await ctx.done("Finished")
+
+    @db.command()
+    async def list(self, ctx, *args, **kwargs):
+        await ctx.done(db.list(*args, **kwargs))
 
 def setup(bot):
     bot.add_cog(Owner(bot))
